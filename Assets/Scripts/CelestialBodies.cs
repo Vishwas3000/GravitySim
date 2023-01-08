@@ -36,7 +36,6 @@ public class CelestialBodies : MonoBehaviour
         _currentVelocity = _initialVelocity;
         _currentSimVelocity= _currentVelocity;
         transform.localScale = Vector3.one*radius;
-        //lineRenderer = new LineRenderer();
         linePosition = new List<Vector3>
         {
             transform.position

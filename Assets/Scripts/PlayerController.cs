@@ -4,15 +4,25 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public float energy { get; set; }
+    public float health { get; set; }
 
-    // Update is called once per frame
-    void Update()
+    void Damage(float hitPoint)
     {
-        
+        health-=hitPoint;
+        if(health <=0 )
+        {
+            health = 0;
+            PlayerDead();
+        }
     }
+    void PlayerDead()
+    {
+
+    }
+    public float GetEnegy()
+    {
+        return energy;
+    }
+    
 }

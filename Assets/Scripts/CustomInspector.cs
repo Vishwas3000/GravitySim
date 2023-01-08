@@ -12,13 +12,13 @@ public class CustomInspector : Editor
 
         TragectoryCalculator obj = (TragectoryCalculator)target;
 
-        if(GUILayout.Button("Recalculate Trtagectory"))
-        {
-            obj.CalculateTragectory();
-        }
         if(GUILayout.Toggle(false, "auto Update"))
         {
             obj.autoUpdate = true;
+        }
+        if(GUILayout.Button("Recalculate Trtagectory"))
+        {
+            obj.CalculateTragectory();
         }
     }
 }
