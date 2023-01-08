@@ -9,32 +9,39 @@ public class CelestialBodies : MonoBehaviour
 {
     public float mass;
     public float radius;
-    public Rigidbody rigidbody;
+    public Rigidbody rb;
     public List<Vector3> linePosition;
     public LineRenderer lineRenderer;
     public Material _material;
 
     [SerializeField]
-    private Vector3 initialVelocity;
-    private Vector3 currentVelocity;
-    private Vector3 currentSimVelocity;
+    private Vector3 _initialVelocity;
+    [SerializeField]
+    private LineRenderer _lineRender;
+    private Vector3 _currentVelocity;
+    private Vector3 _currentSimVelocity;
+    
 
-    public void Awake()
+    private void Awake()
     {
         InilizeBody();
+    }
+    private void Start()
+    {
+        _lineRender.enabled = false;
     }
 
     public void InilizeBody()
     {
-        currentVelocity = initialVelocity;
-        currentSimVelocity= currentVelocity;
+        _currentVelocity = _initialVelocity;
+        _currentSimVelocity= _currentVelocity;
         transform.localScale = Vector3.one*radius;
         //lineRenderer = new LineRenderer();
         linePosition = new List<Vector3>
         {
             transform.position
         };
-        lineRenderer.SetColors(_material.color, _material.color);
+        lineRenderer.startColor = _material.color;
     }
 
     public void SetLineRenderer()
@@ -61,7 +68,7 @@ public class CelestialBodies : MonoBehaviour
                     Vector3 forceDir = (distVec).normalized;
                     Vector3 force = forceDir * Universe.gravitationalConstant * mass * otherBody.mass / sqrDst;
                     Vector3 acceleration = force / mass;
-                    currentSimVelocity += acceleration * timeStep;
+                    _currentSimVelocity += acceleration * timeStep;
                 }
             }
             else
@@ -69,11 +76,11 @@ public class CelestialBodies : MonoBehaviour
 
                 if(otherBody!=this) 
                 {
-                    float sqrDst = (otherBody.rigidbody.position - rigidbody.position).sqrMagnitude;
-                    Vector3 forceDir = (otherBody.rigidbody.position - rigidbody.position).normalized;
+                    float sqrDst = (otherBody.rb.position - rb.position).sqrMagnitude;
+                    Vector3 forceDir = (otherBody.rb.position - rb.position).normalized;
                     Vector3 force = forceDir * Universe.gravitationalConstant * mass * otherBody.mass / sqrDst;
                     Vector3 acceleration = force / mass;
-                    currentVelocity += acceleration * timeStep;
+                    _currentVelocity += acceleration * timeStep;
 
                 }
             }
@@ -83,10 +90,10 @@ public class CelestialBodies : MonoBehaviour
     {
         if(isGhost)
         {
-            linePosition.Add(currentSimVelocity*timeStep + linePosition.Last());
+            linePosition.Add(_currentSimVelocity*timeStep + linePosition.Last());
             //Debug.Log(gameObject.name + " current position :" + linePosition.Last());
             return;
         }
-        rigidbody.position += currentVelocity * timeStep;
+        rb.position += _currentVelocity * timeStep;
     }
 }
